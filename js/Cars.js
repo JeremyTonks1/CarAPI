@@ -54,7 +54,12 @@ const CarStorage = {
     }
     //Returns an array of the results that matched the search request.
     return results;
-  }
+  },
+  ImportCar: function(carID, carYear, carBrand, carModel, carEngine){
+    //Creates a new car object, add it to the Car Storage.
+    const _car = new Car(carID, carYear, carBrand, carModel, carEngine);
+    this.carArray.push(_car);
+  },
 }
 //Car Class
 class Car{
@@ -72,9 +77,9 @@ class Car{
 
 
 //Debugging !!!!!!Remove in Final Release!!!!!!!!!!
-
+/*
 //npm install prompt-sync
-const ps = require('prompt-sync');
+//const ps = require('prompt-sync');
 const prompt = ps();
 
 // String Formating Function
@@ -195,4 +200,60 @@ while (true){
   else if (input == 'exit'){
     return;
   }
+}
+*/
+
+$(document).ready( function () {
+
+  let row = ''
+  let table = document.getElementById('carContent')
+
+  $.ajax({
+    url: 'xml/Cars.xml',
+    dataType: 'xml',
+    type: "GET",
+    success: function(response){
+      $(response).find("Car").each(function(){
+        let _carID = $(this).find("ID").text();
+        let _carYear = $(this).find("Year").text();
+        let _carBrand = $(this).find("Brand").text();
+        let _carModel = $(this).find("Model").text();
+        let _carEngine = $(this).find("EngineType").text();
+
+        CarStorage.ImportCar(_carID, _carYear, _carBrand, _carModel, _carEngine);
+        row += createString(_carID,_carYear,_carBrand,_carModel,_carEngine)
+
+      });
+      table.innerHTML = row
+
+      //Constructs the Table
+      $('#example').DataTable({
+        ordering: false,
+        searching: false,
+        lengthMenu: [[5,10,20],[5,10,20]]
+      });
+    },
+    error: function(){
+
+    }
+  });
+
+  $('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+  })
+
+  $('#myUpdateModal').on('shown.bs.modal2', function () {
+    $('#myInput').trigger('focus')
+  })
+});
+
+function createString(_carID, _carYear, _carBrand, _carModel, _carEngine){
+  let row = "<tr data-bs-toggle=\"modal2\" data-bs-target=\"#myUpdateModal\">" +
+            "<th scope=\"row\">" + _carID + "</th>" +
+            "<td>" + _carYear + "</td>" +
+            "<td>" + _carBrand + "</td>" +
+            "<td>" + _carModel + "</td>" +
+            "<td>" + _carEngine + "</td>" +
+          "</tr>"
+  return row
 }
