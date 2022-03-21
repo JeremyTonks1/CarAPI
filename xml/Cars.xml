@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Info>
-  <CarID>6</CarID>
+  <IDCounter>7</IDCounter>
   <CarStorage>
     <Car>
       <ID>0</ID>
-      <Year>2017</Year>
+      <Year>2019</Year>
       <Brand>Honda</Brand>
       <Model>Jazz</Model>
       <EngineType>Petrol</EngineType>

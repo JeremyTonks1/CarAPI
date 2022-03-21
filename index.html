@@ -57,25 +57,25 @@
             <div class="modal-body">
 
               <div class="form-group">
-                <label for="usr">Year:</label>
+                <label for="addYear">Year:</label>
                 <input type="text" class="form-control" id="addYear">
               </div>
               <div class="form-group">
-                <label for="pwd">Brand:</label>
-                <input type="password" class="form-control" id="addBrand">
+                <label for="addBrand">Brand:</label>
+                <input type="text" class="form-control" id="addBrand">
               </div>
               <div class="form-group">
-                <label for="pwd">Model:</label>
-                <input type="password" class="form-control" id="addModel">
+                <label for="addModel">Model:</label>
+                <input type="text" class="form-control" id="addModel">
               </div>
               <div class="form-group">
-                <label for="pwd">Engine Type:</label>
-                <input type="password" class="form-control" id="addEngine">
+                <label for="addEngine">Engine Type:</label>
+                <input type="text" class="form-control" id="addEngine">
               </div>
 
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+              <button onclick="CarAPI.AddCar()" type="button" class="btn btn-default" data-bs-dismiss="modal"> Add </button>
             </div>
           </div>
 
@@ -84,38 +84,39 @@
       </div>
 
       <!-- Modal -->
-      <div class="modal fade" id="myUpdateModal" role="dialog">
+      <div class="modal fade" id="myModal2" role="dialog">
         <div class="modal-dialog">
 
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Update a Car Entry</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal2"></button>
+              <h4 id="updateTitle" class="modal-title">Car</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
             </div>
             <div class="modal-body">
 
               <div class="form-group">
-                <label for="usr">Year:</label>
+                <label for="updateYear">Year:</label>
                 <input type="text" class="form-control" id="updateYear">
               </div>
               <div class="form-group">
-                <label for="pwd">Brand:</label>
-                <input type="password" class="form-control" id="updateBrand">
+                <label for="updateBrand">Brand:</label>
+                <input type="text" class="form-control" id="updateBrand">
               </div>
               <div class="form-group">
-                <label for="pwd">Model:</label>
-                <input type="password" class="form-control" id="updateModel">
+                <label for="updateModel">Model:</label>
+                <input type="text" class="form-control" id="updateModel">
               </div>
               <div class="form-group">
-                <label for="pwd">Engine Type:</label>
-                <input type="password" class="form-control" id="updateEngine">
+                <label for="updateEngine">Engine Type:</label>
+                <input type="text" class="form-control" id="updateEngine">
               </div>
 
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-bs-dismiss="modal2">Close</button>
+              <button id="updateButton" type="button" class="btn btn-default" onclick="CarAPI.UpdateCar()" data-bs-dismiss="modal">Update</button>
+              <button id="deleteButton" type="button" class="btn btn-default" onclick="CarAPI.DeleteCar()" data-bs-dismiss="modal">Delete</button>
             </div>
           </div>
         </div>
