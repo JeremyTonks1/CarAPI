@@ -6,6 +6,8 @@
     font-size: 1em;
 }
 
-#tableContainer{
-  padding: 100px;
+.errorMessage{
+  color: red;
+  margin: 0;
+  padding: 0;
 }
