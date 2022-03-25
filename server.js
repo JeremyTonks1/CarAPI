@@ -23,8 +23,16 @@ app.post('/add', (request, response) =>{
         Model: request.query.Model,
         EngineType: request.query.Engine,
       }
-      //Add new car object.
-      data.Info.CarStorage[0].Car.push(_car)
+      //Are there no cars avaible in the XML.
+      if(data.Info.Car == undefined){
+        //Add new car object.
+      }else{
+        data.Info.Car = _car
+        //Find the last car index.
+        let i = data.Info.Car.length
+        //Add new car object.
+        data.Info.Car[i] = (_car)
+      }
       //Increment the unique number.
       data.Info.IDCounter = parseInt(data.Info.IDCounter) + 1
       //Convert the JS Object to the XML file.
@@ -44,13 +52,13 @@ app.post('/update', (request, response) =>{
     //Convert the XML file to a JS object.
     parseString(xml, function(err, data) {
       //Search for the car with the matching ID to update.
-      for(let i = 0; i < data.Info.CarStorage[0].Car.length; i ++){
-        if(data.Info.CarStorage[0].Car[i].ID == request.query.ID){
+      for(let i = 0; i < data.Info.Car.length; i ++){
+        if(data.Info.Car[i].ID == request.query.ID){
           //Update the cars details.
-          data.Info.CarStorage[0].Car[i].Year = request.query.Year
-          data.Info.CarStorage[0].Car[i].Brand = request.query.Brand
-          data.Info.CarStorage[0].Car[i].Model = request.query.Model
-          data.Info.CarStorage[0].Car[i].EngineType = request.query.Engine
+          data.Info.Car[i].Year = request.query.Year
+          data.Info.Car[i].Brand = request.query.Brand
+          data.Info.Car[i].Model = request.query.Model
+          data.Info.Car[i].EngineType = request.query.Engine
           //Convert the JS Object to the XML file.
           const builder = new Builder();
           const _xml = builder.buildObject(data);
@@ -71,11 +79,11 @@ app.post('/delete', (request, response) =>{
     //Convert the XML file to a JS object.
     parseString(xml, function(err, data) {
       //Convert each Car into a Table Row.
-      for(let i = 0; i < data.Info.CarStorage[0].Car.length; i ++){
+      for(let i = 0; i < data.Info.Car.length; i ++){
         //Search for the car with the matching ID to Delete..
-        if(data.Info.CarStorage[0].Car[i].ID == request.query.ID){
+        if(data.Info.Car[i].ID == request.query.ID){
           //Delete the car
-          data.Info.CarStorage[0].Car.splice(i, 1)
+          delete data.Info.Car[i]
           //Convert the JS Object to the XML file.
           const builder = new Builder();
           const _xml = builder.buildObject(data);
@@ -86,25 +94,26 @@ app.post('/delete', (request, response) =>{
       }
     })
   })
+  //Confirm action.
   response.send()
 })
 //GET request to recieve all the matching cars from the XML file.
 app.get('/data', (request, response) =>{
+  let row = [];
   fs.readFile('xml/Cars.xml',  function(err, _xml){
     //Convert the XML file to a JS object.
     parseString(_xml, function(err, data) {
       //Is the data readable.
       if(data != undefined){
           //Is the car array empty.
-          if(data.Info.CarStorage[0].Car != undefined){
-            let row = [];
+          if(data.Info.Car !== undefined){
             //Convert each Car into a Table Row.
-            for(let i = 0; i < data.Info.CarStorage[0].Car.length; i ++){
-              let _carID = data.Info.CarStorage[0].Car[i].ID[0]
-              let _carYear = data.Info.CarStorage[0].Car[i].Year[0]
-              let _carBrand = data.Info.CarStorage[0].Car[i].Brand[0]
-              let _carModel = data.Info.CarStorage[0].Car[i].Model[0]
-              let _carEngine = data.Info.CarStorage[0].Car[i].EngineType[0]
+            for(let i = 0; i < data.Info.Car.length; i ++){
+              let _carID = data.Info.Car[i].ID[0]
+              let _carYear = data.Info.Car[i].Year[0]
+              let _carBrand = data.Info.Car[i].Brand[0]
+              let _carModel = data.Info.Car[i].Model[0]
+              let _carEngine = data.Info.Car[i].EngineType[0]
               //Searching
               if(_carID == request.query.ID || '' == request.query.ID){
                 if(_carYear == request.query.Year || '' == request.query.Year){
@@ -119,11 +128,11 @@ app.get('/data', (request, response) =>{
             response.send(row);
           }else{
           //Cars array is empty.
-          response.status(400)
+          response.send(row)
         }
       }else{
         //Cars is not avaible.
-        response.status(400)
+        response.send(row)
       }
     })
   })

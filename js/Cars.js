@@ -115,21 +115,27 @@ const CarAPI = {
         }
         //Draw Table.
         table.draw()
-        //Each row opens the edit modal for each car.
-        $('#carContent').on('click', 'tr', function() {
-          //Remove any existing error messages.
-          $('.errorMessage').remove()
-          //Open the edit modal.
-          $('#editModal').modal('show');
-          //Display the details of the car in the selected row.
-          $('#updateTitle').html('Car ' + table.row( this ).data()[0])
-          $('#updateYear').val(table.row( this ).data()[1]);
-          $('#updateBrand').val(table.row( this ).data()[2]);
-          $('#updateModel').val(table.row( this ).data()[3]);
-          $('#updateEngine').val(table.row( this ).data()[4]);
-          //Update the selected row ID to the car ID.
-          CarAPI.selectedID = table.row(this).data()[0];
-        })
+        //Check if there is an empty table.
+        if(data.length > 0){
+          //Each row opens the edit modal for each car.
+          $('#carContent').on('click', 'tr', function() {
+            //Remove any existing error messages.
+            $('.errorMessage').remove()
+            //Open the edit modal.
+            $('#editModal').modal('show');
+            //Display the details of the car in the selected row.
+            $('#updateTitle').html('Car ' + table.row( this ).data()[0])
+            $('#updateYear').val(table.row( this ).data()[1]);
+            $('#updateBrand').val(table.row( this ).data()[2]);
+            $('#updateModel').val(table.row( this ).data()[3]);
+            $('#updateEngine').val(table.row( this ).data()[4]);
+            //Update the selected row ID to the car ID.
+            CarAPI.selectedID = table.row(this).data()[0];
+          })
+        }else{
+          //Do not click on empty rows.
+          $('#carContent').off('click');
+        }
     //If the search fails draw an empty table.
     }).fail(function() {
       table.clear().draw()
