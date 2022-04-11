@@ -26,8 +26,8 @@ app.post('/add', (request, response) =>{
       //Are there no cars avaible in the XML.
       if(data.Info.Car == undefined){
         //Add new car object.
-      }else{
         data.Info.Car = _car
+      }else{
         //Find the last car index.
         let i = data.Info.Car.length
         //Add new car object.
@@ -41,7 +41,7 @@ app.post('/add', (request, response) =>{
       fs.writeFile('xml/Cars.xml', _xml, function (err, file){
         if(err) throw err;
       })
-    })
+    });
   })
   //Confirm action.
   response.send()
@@ -52,23 +52,22 @@ app.post('/update', (request, response) =>{
     //Convert the XML file to a JS object.
     parseString(xml, function(err, data) {
       //Search for the car with the matching ID to update.
-      for(let i = 0; i < data.Info.Car.length; i ++){
-        if(data.Info.Car[i].ID == request.query.ID){
+      data.Info.Car.forEach(car => {
+        if(car.ID == request.query.ID){
           //Update the cars details.
-          data.Info.Car[i].Year = request.query.Year
-          data.Info.Car[i].Brand = request.query.Brand
-          data.Info.Car[i].Model = request.query.Model
-          data.Info.Car[i].EngineType = request.query.Engine
+          car.Year = request.query.Year
+          car.Brand = request.query.Brand
+          car.Model = request.query.Model
+          car.EngineType = request.query.Engine
           //Convert the JS Object to the XML file.
           const builder = new Builder();
           const _xml = builder.buildObject(data);
           fs.writeFile('xml/Cars.xml', _xml, function (err, file){
             if(err) throw err;
           })
-
         }
-      }
-    })
+      });
+    });
   })
   //Confirm action.
   response.send()
@@ -79,11 +78,11 @@ app.post('/delete', (request, response) =>{
     //Convert the XML file to a JS object.
     parseString(xml, function(err, data) {
       //Convert each Car into a Table Row.
-      for(let i = 0; i < data.Info.Car.length; i ++){
-        //Search for the car with the matching ID to Delete..
-        if(data.Info.Car[i].ID == request.query.ID){
-          //Delete the car
-          delete data.Info.Car[i]
+      data.Info.Car.forEach((car, index) => {
+        //Search for the car with the matching ID to Delete.
+        if(car.ID == request.query.ID){
+          //Delete the car.
+          delete data.Info.Car[index]
           //Convert the JS Object to the XML file.
           const builder = new Builder();
           const _xml = builder.buildObject(data);
@@ -91,8 +90,8 @@ app.post('/delete', (request, response) =>{
             if(err) throw err;
           })
         }
-      }
-    })
+      });
+    });
   })
   //Confirm action.
   response.send()
@@ -100,30 +99,30 @@ app.post('/delete', (request, response) =>{
 //GET request to recieve all the matching cars from the XML file.
 app.get('/data', (request, response) =>{
   let row = [];
-  fs.readFile('xml/Cars.xml',  function(err, _xml){
+  fs.readFile('xml/Cars.xml',  function(err, xml){
     //Convert the XML file to a JS object.
-    parseString(_xml, function(err, data) {
+    parseString(xml, function(err, data) {
       //Is the data readable.
       if(data != undefined){
           //Is the car array empty.
           if(data.Info.Car !== undefined){
             //Convert each Car into a Table Row.
-            for(let i = 0; i < data.Info.Car.length; i ++){
-              let _carID = data.Info.Car[i].ID[0]
-              let _carYear = data.Info.Car[i].Year[0]
-              let _carBrand = data.Info.Car[i].Brand[0]
-              let _carModel = data.Info.Car[i].Model[0]
-              let _carEngine = data.Info.Car[i].EngineType[0]
+            data.Info.Car.forEach(car => {
+              let carID = car.ID[0]
+              let carYear = car.Year[0]
+              let carBrand = car.Brand[0]
+              let carModel = car.Model[0]
+              let carEngine = car.EngineType[0]
               //Searching
-              if(_carID == request.query.ID || '' == request.query.ID){
-                if(_carYear == request.query.Year || '' == request.query.Year){
-                  if(_carBrand == request.query.Brand || '' == request.query.Brand){
-                    let _car = [_carID, _carYear, _carBrand, _carModel, _carEngine]
+              if(carID == request.query.ID || '' == request.query.ID){
+                if(carYear == request.query.Year || '' == request.query.Year){
+                  if(carBrand == request.query.Brand || '' == request.query.Brand){
+                    let _car = [carID, carYear, carBrand, carModel, carEngine]
                     row.push(_car)
                   }
                 }
               }
-            }
+            });
             //Return an array of rows to display to the user.
             response.send(row);
           }else{
@@ -132,9 +131,9 @@ app.get('/data', (request, response) =>{
         }
       }else{
         //Cars is not avaible.
-        response.send(row)
+        response.send(rowArray)
       }
-    })
+    });
   })
 });
 //Server file directories.
