@@ -110,9 +110,9 @@ const CarAPI = {
         //Clear table.
         table.clear().draw()
         //Add each car as a row.
-        for(let i = 0; i < data.length; i ++){
-          table.row.add(data[i])
-        }
+        data.forEach(_row => {
+          table.row.add(_row)
+        });
         //Draw Table.
         table.draw()
         //Check if there is an empty table.
@@ -124,11 +124,11 @@ const CarAPI = {
             //Open the edit modal.
             $('#editModal').modal('show');
             //Display the details of the car in the selected row.
-            $('#updateTitle').html('Car ' + table.row( this ).data()[0])
-            $('#updateYear').val(table.row( this ).data()[1]);
-            $('#updateBrand').val(table.row( this ).data()[2]);
-            $('#updateModel').val(table.row( this ).data()[3]);
-            $('#updateEngine').val(table.row( this ).data()[4]);
+            $('#updateTitle').html('Car ' + table.row(this).data()[0])
+            $('#updateYear').val(table.row(this).data()[1]);
+            $('#updateBrand').val(table.row(this).data()[2]);
+            $('#updateModel').val(table.row(this).data()[3]);
+            $('#updateEngine').val(table.row(this).data()[4]);
             //Update the selected row ID to the car ID.
             CarAPI.selectedID = table.row(this).data()[0];
           })
